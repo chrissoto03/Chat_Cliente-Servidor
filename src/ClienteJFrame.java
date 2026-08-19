@@ -67,9 +67,9 @@ public class ClienteJFrame extends javax.swing.JFrame {
     }
     public void actualizarUsuarios(String mensaje) {
         String usuarios = mensaje.substring(9);
-        cmbUsuarios.removeAllItems();
-        cmbUsuarios.addItem("Usuarios en linea");
-
+        while (cmbUsuarios.getItemCount() > 1) {
+            cmbUsuarios.removeItemAt(1);
+        }
         if (!usuarios.equals("")) {
             String[] lista = usuarios.split(","); /// .split almacena como una lista una palabra "como estas" en dos "como", "estas" quitando espacios en blanco
             for (String usuario : lista) {
@@ -121,7 +121,7 @@ public class ClienteJFrame extends javax.swing.JFrame {
         });
 
         cmbUsuarios.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        cmbUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Conectados" }));
+        cmbUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuarios en Linea" }));
         cmbUsuarios.setPreferredSize(new java.awt.Dimension(150, 30));
         cmbUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
