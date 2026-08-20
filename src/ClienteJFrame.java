@@ -24,16 +24,22 @@ public class ClienteJFrame extends javax.swing.JFrame {
      */
     public ClienteJFrame() {
         initComponents();
-        iniciarCliente();
+        // Se elimina iniciar cliente para que no se inicie automaticamente la vista de Cliente
     }
-    public void iniciarCliente(){
+    public boolean iniciarCliente(){ // cambio a boolean para que devuelva un valor verdadero o falso, esto para verificar si el nombre fue valido o si se cancelo
         
         try {
-            nombre = JOptionPane.showInputDialog(this, "Ingrese su nombre: ");
-            if (nombre == null || nombre.trim().equals("")) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar un nombre.");
-                return;
+            String nombreIngresado = null;
+            while (nombreIngresado == null || nombreIngresado.trim().equals("")) {   // Se utiliza un while en lugar de if, ya que con el if mostraba el mensaje de error y seguia adelante, ahora, si el nombre esta vacio pregunta en un ciclo y no avanza hasta tener un valor valido.
+                nombreIngresado = JOptionPane.showInputDialog(null, "Ingrese su nombre: "); 
+                if (nombreIngresado == null) { 
+                    return false; // Si el usuario da clic en cancel o cierra la vista, retorna "No hay nombre Valido"
+                }
+                if (nombreIngresado.trim().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Debe escribir un nombre."); // Si el campo de nombre queda en blanco y se dio ok, muestra el mensaje y pide nuevamente el nombre
+                }
             }
+            nombre = nombreIngresado;
             socket = new Socket(HOST, PUERTO);
             
             entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -64,6 +70,7 @@ public class ClienteJFrame extends javax.swing.JFrame {
         } catch (Exception e) {
             txtMensajesRe.append("Error de conexion: " + e.getMessage() + "\n");
         }
+        return true; // Al ser boolean, obliga a que termine con un return, significa que el nombre fue valido y muestra la ventana.
     }
     public void actualizarUsuarios(String mensaje) {
         String usuarios = mensaje.substring(9);
@@ -264,7 +271,13 @@ public class ClienteJFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ClienteJFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            ClienteJFrame frame = new ClienteJFrame(); // Se crea el objeto
+            boolean nombreValido = frame.iniciarCliente(); // Se llama a iniciarCliente y guarda si devuele un valor verdadero o falso en la variable nombreValido.
+            if (nombreValido) { // mediante el if, solo si el nombre fue valido se muestra la ventana, si se da clic en cancelar el if no se cumple y no se ejecuta ni muestra la ventana de Cliente
+                frame.setVisible(true);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
