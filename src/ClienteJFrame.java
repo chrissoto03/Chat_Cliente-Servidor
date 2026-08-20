@@ -276,7 +276,9 @@ public class ClienteJFrame extends javax.swing.JFrame {
             boolean nombreValido = frame.iniciarCliente(); // Se llama a iniciarCliente y guarda si devuele un valor verdadero o falso en la variable nombreValido.
             if (nombreValido) { // mediante el if, solo si el nombre fue valido se muestra la ventana, si se da clic en cancelar el if no se cumple y no se ejecuta ni muestra la ventana de Cliente
                 frame.setVisible(true);
-            }
+            } else {
+                System.exit(0); // Si se selecciona cancel, cerrara el programa por completo
+            }  
         });
     }
 
